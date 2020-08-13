@@ -1,13 +1,21 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Customer from './components/Customer'
+
+const data={
+  name:"임얼쑤",
+  gender:"man",
+  age:25
+}
 
 function App() {
   return (
-    <div className="gray-background">
-      <img src={logo} lat="logo"/>
-      <h2>동빈나 리액트 강좌</h2>
-    </div>
+    <Customer
+    name={data.name}
+    gender={data.gender}
+    age={data.age}
+    />
   );
 }
 
