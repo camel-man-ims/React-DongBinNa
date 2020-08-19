@@ -10,21 +10,32 @@ class CustomerAdd extends Component{
     constructor(props){
         super(props)
         this.state={
-            // file:null, // byte형태의 data
             name:'',
             age:'',
             gender:'',
             job:'',
-            // fileName:'' // 이미지의 이름
+            file:null, // byte형태의 data
+            fileName:'' // 이미지의 이름
         }
     }
 
     handleFormSubmit = (e)=>{
         e.preventDefault()
-        this.addCustomer()
+        this.addCustomer().then(()=>{
+            this.props.stateRefresh()
+        })
+
+        this.setState({
+            name:'',
+            age:'',
+            gender:'',
+            job:'',
+            file:null, // byte형태의 data
+            fileName:'' // 이미지의 이름
+        })
     }
 
-    handFileChange = (e)=>{
+    handleFileChange = (e)=>{
         this.setState({
             file: e.target.files[0], // e.target = event가 발생한 input값 자체 
             fileName: e.target.value
@@ -37,44 +48,35 @@ class CustomerAdd extends Component{
         this.setState(nextState)
     }
 
-    addCustomer = ()=>{
-        const url = '/user/test'
+    addCustomer = async ()=>{
         const formData = new FormData();
-        // formData.append('img',this.state.file)
+        formData.append('img',this.state.file)
         formData.append('name',this.state.name)
         formData.append('age',this.state.age)
         formData.append('gender',this.state.gender)
         formData.append('job',this.state.job)
 
-        // const config = {
-        //     headers:{
-        //         'content-type':'multipart/form-data'
-        //     }
-        // }
+        const config = {
+            headers:{
+                'content-type':'multipart/form-data'
+            }
+        }
         var object = {}
         formData.forEach(function(value,key){
             object[key]=value
         })
         console.log(object)
 
-        api.post('/',
-        
-         object
-            // name:"임얼조",
-            // age:21,
-            // gender:"남자",
-            // job:"대통령"
-        
-         
-        )
-       
+        return api.post('/',
+         formData,config
+            )
     }
 
     render(){
         return(
             <form onSubmit={this.handleFormSubmit}>
                 <h1>고객 추가</h1>
-                {/* 프로필 이미지: <input type="file" name="file" file={this.state.file} value={this.state.fileName} onChange={this.handFileChange}/><br/> */}
+                프로필 이미지: <input type="file" name="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange}/><br/>
                 이름: <input type="text" name="name" value={this.state.name} onChange={this.handleValueChange}/><br/>
                 나이: <input type="text" name="age" value={this.state.age} onChange={this.handleValueChange}/><br/>
                 성별: <input type="text" name="gender" value={this.state.gender} onChange={this.handleValueChange}/><br/>

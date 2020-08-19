@@ -45,6 +45,14 @@ class App extends Component{
     }
   }
 
+  stateRefresh=()=>{
+    this.setState({
+      dateState:[],
+      completed:0
+    })
+    this.callApi()
+  }
+
   componentDidMount(){
     this.timer = setInterval(this.progress,20)
     this.callApi()
@@ -79,6 +87,7 @@ class App extends Component{
             <TableCell>나이</TableCell>
             <TableCell>성별</TableCell>
             <TableCell>직업</TableCell>
+            <TableCell>삭제</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -86,8 +95,9 @@ class App extends Component{
           this.state.dataState.map(userData=>{
             return(
               <Customer
+              stateRefresh={this.stateRefresh}
               img={userData.img}
-              key={userData.id}
+              key={userData.idx}
               id={userData.idx}
               name={userData.name}
               gender={userData.gender}
@@ -109,7 +119,7 @@ class App extends Component{
         </TableBody>
       </Table>
     </Paper>
-    <CustomerAdd/>
+    <CustomerAdd stateRefresh={this.stateRefresh}/>
     </div>
   );
 }
